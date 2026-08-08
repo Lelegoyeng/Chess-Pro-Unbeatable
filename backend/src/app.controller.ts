@@ -20,4 +20,9 @@ export class AppController {
     const move = await this.appService.getBestMove(body.fen, body.depth);
     return { bestMove: move };
   }
+
+  @Post('analyze')
+  async analyze(@Body() body: BestMoveDto) {
+    return this.appService.analyze(body.fen, body.depth ?? 16);
+  }
 }

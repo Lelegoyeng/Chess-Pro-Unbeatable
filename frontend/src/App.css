@@ -210,25 +210,40 @@ body {
   width: 100%;
   display: flex;
   justify-content: center;
-  align-items: center;
-  padding: 20px;
+  align-items: flex-start;
+  padding: 24px;
   background:
     radial-gradient(ellipse 60% 40% at 50% 0%, rgba(88,101,242,0.08) 0%, transparent 60%),
     var(--bg);
 }
 
-.game-wrapper {
+.game-layout {
+  width: 100%;
+  max-width: 1120px;
+  display: grid;
+  grid-template-columns: minmax(0, 560px) minmax(280px, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.board-column {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 24px;
   padding: 28px;
-  width: 100%;
-  max-width: 560px;
   display: flex;
   flex-direction: column;
   gap: 16px;
   box-shadow: 0 24px 48px rgba(0,0,0,0.4);
   animation: fadeUp 0.4s ease;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+  animation: fadeUp 0.45s ease;
 }
 
 /* Header */
@@ -341,6 +356,18 @@ body {
   animation: spin 0.8s linear infinite;
 }
 
+/* Peringatan engine offline */
+.engine-warning {
+  padding: 10px 16px;
+  border-radius: var(--radius-md);
+  background: rgba(239,68,68,0.1);
+  border: 1px solid rgba(239,68,68,0.35);
+  color: #fca5a5;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
 /* Kontrol */
 .game-controls {
   display: flex;
@@ -382,6 +409,253 @@ button {
   box-shadow: 0 6px 20px var(--accent-glow);
 }
 
+/* ═══════════════════════════════════════════════════════
+   SIDEBAR: KARTU ANALISIS & RIWAYAT
+═══════════════════════════════════════════════════════ */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 18px 20px;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.3);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.card-title {
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: -0.2px;
+}
+
+.card-badge {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+
+/* ── Eval bar ── */
+.eval-block {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.eval-bar {
+  position: relative;
+  height: 14px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: linear-gradient(90deg, #312e2b 0%, #4b4743 100%);
+  border: 1px solid var(--border);
+}
+
+.eval-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #e8e6e0 0%, #f5f3ed 100%);
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.eval-bar-mid {
+  position: absolute;
+  inset: 0;
+  left: 50%;
+  width: 2px;
+  margin-left: -1px;
+  background: rgba(255,255,255,0.5);
+}
+
+.eval-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.eval-text {
+  font-size: 20px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  background: linear-gradient(135deg, #fff 30%, #a0a8c0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.eval-persp {
+  font-size: 10px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+/* ── Statistik ── */
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+.stat-row:last-child { border-bottom: none; }
+
+.stat-label {
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.stat-value {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.material-adv {
+  margin-top: 2px;
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+}
+.material-adv.adv-white {
+  background: rgba(255,255,255,0.08);
+  color: #e8e6e0;
+}
+.material-adv.adv-black {
+  background: var(--accent-glow);
+  color: #a0a8ff;
+}
+
+.captured-block {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2px;
+}
+
+.captured-side {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+}
+
+.captured-label {
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.captured-pieces {
+  display: flex;
+  gap: 3px;
+  min-height: 18px;
+  align-items: center;
+}
+
+.piece-glyph {
+  font-size: 17px;
+  line-height: 1;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.6));
+}
+
+.piece-glyph.black-glyph {
+  filter: none;
+  opacity: 0.95;
+}
+
+.captured-empty {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.thinking-text {
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.bestmove-text {
+  color: var(--green);
+}
+
+/* ── Riwayat langkah ── */
+.history-card { display: flex; flex-direction: column; min-height: 220px; }
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-height: 340px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.history-list::-webkit-scrollbar {
+  width: 6px;
+}
+.history-list::-webkit-scrollbar-thumb {
+  background: var(--surface2);
+  border-radius: 4px;
+}
+.history-list::-webkit-scrollbar-thumb:hover {
+  background: #2c2d36;
+}
+
+.history-row {
+  display: grid;
+  grid-template-columns: 34px 1fr 1fr;
+  gap: 6px;
+  align-items: center;
+  padding: 5px 8px;
+  border-radius: var(--radius-sm);
+  transition: background 0.15s ease;
+}
+.history-row:hover { background: rgba(255,255,255,0.03); }
+
+.move-num {
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.move-san {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  background: transparent;
+  text-align: left;
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  font-variant-numeric: tabular-nums;
+}
+.move-san:hover {
+  background: rgba(255,255,255,0.06);
+}
+
+.move-current {
+  background: var(--accent-glow);
+  border: 1px solid rgba(88,101,242,0.35);
+  color: #a0a8ff;
+}
+
+.history-empty {
+  color: var(--muted);
+  font-size: 13px;
+  padding: 16px 8px;
+  text-align: center;
+}
+
 /* ─── Animasi ─── */
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(20px); }
@@ -400,9 +674,17 @@ button {
 }
 
 /* ─── Responsive ─── */
+@media (max-width: 1000px) {
+  .game-layout {
+    grid-template-columns: minmax(0, 560px);
+    justify-content: center;
+  }
+  .sidebar { width: 100%; max-width: 560px; }
+}
+
 @media (max-width: 500px) {
   .select-card { padding: 36px 24px; }
-  .game-wrapper { padding: 20px 16px; }
+  .board-column { padding: 20px 16px; }
   .game-title { font-size: 15px; }
   .color-options { grid-template-columns: 1fr 1fr; gap: 8px; }
 }
