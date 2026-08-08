@@ -356,6 +356,65 @@ body {
   animation: spin 0.8s linear infinite;
 }
 
+/* ── Overlay skak & skakmat ── */
+.check-line-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 4;
+}
+.check-line {
+  stroke: #ef4444;
+  vector-effect: non-scaling-stroke;
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  stroke-dasharray: 7 4;
+  filter: drop-shadow(0 0 5px rgba(239,68,68,0.85));
+  animation: checkFlow 0.7s linear infinite;
+}
+.check-ring {
+  position: absolute;
+  z-index: 5;
+  pointer-events: none;
+  box-shadow: inset 0 0 0 3px rgba(239,68,68,0.85);
+  border-radius: 6px;
+  animation: ringPulse 1.2s ease-in-out infinite;
+}
+.check-ring-king {
+  box-shadow: inset 0 0 0 3px rgba(239,68,68,0.9), inset 0 0 18px rgba(239,68,68,0.5);
+  animation-delay: 0.15s;
+}
+.mate-overlay {
+  position: absolute;
+  z-index: 6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.mate-x {
+  font-size: 30px;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1;
+  text-shadow: 0 0 12px rgba(239,68,68,1), 0 0 30px rgba(239,68,68,0.7);
+  animation: matePop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.board-wrapper.mated {
+  border-color: rgba(239,68,68,0.6);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 32px rgba(239,68,68,0.18);
+}
+.board-wrapper.mated::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background: radial-gradient(ellipse at center, transparent 55%, rgba(239,68,68,0.13));
+  pointer-events: none;
+}
+
 /* Peringatan engine offline */
 .engine-warning {
   padding: 10px 16px;
@@ -588,6 +647,192 @@ button {
   color: var(--green);
 }
 
+/* ── Grafik evaluasi & donut aktivitas ── */
+.chart-section {
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+  margin-top: 4px;
+}
+.chart-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.chart-title {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.2px;
+}
+.chart-badge {
+  font-size: 10px;
+  color: var(--muted);
+  font-weight: 600;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  padding: 2px 8px;
+  border-radius: 20px;
+}
+
+.chart-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.eval-chart {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.chart-mid {
+  stroke: rgba(255,255,255,0.16);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+}
+.chart-line {
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.chart-line-white {
+  stroke: #e8e6e0;
+  filter: drop-shadow(0 0 4px rgba(255,255,255,0.35));
+}
+.chart-line-black {
+  stroke: #818cf8;
+  filter: drop-shadow(0 0 4px rgba(129,140,248,0.4));
+}
+.chart-dot {
+  stroke: #0d0d0f;
+  stroke-width: 1;
+}
+.chart-dot-white { fill: #fff; }
+.chart-dot-black { fill: #818cf8; }
+.chart-empty {
+  color: var(--muted);
+  font-size: 12px;
+  padding: 18px 8px;
+  text-align: center;
+}
+.chart-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 10px;
+  color: var(--muted);
+  font-weight: 600;
+}
+.chart-value {
+  color: var(--text);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.donut-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.donut {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.donut-chart-wrap {
+  position: relative;
+  width: 92px;
+  height: 92px;
+  flex-shrink: 0;
+}
+.donut-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.donut-svg:hover .donut-seg {
+  filter: brightness(1.2);
+}
+.donut-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.donut-total {
+  font-size: 18px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+.donut-label {
+  font-size: 9px;
+  color: var(--muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 2px;
+}
+.donut-title {
+  font-size: 12px;
+  font-weight: 700;
+}
+.donut-legend {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px 8px;
+  width: 100%;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  color: var(--muted);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.legend-item b { color: var(--text); }
+.legend-swatch {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+.legend-empty {
+  color: var(--muted);
+  font-size: 11px;
+  grid-column: 1 / -1;
+  text-align: center;
+}
+
+.activity-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 10px;
+  border-top: 1px solid var(--border);
+  padding-top: 10px;
+}
+.activity-col {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--muted);
+}
+.activity-col b {
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
 /* ── Riwayat langkah ── */
 .history-card { display: flex; flex-direction: column; min-height: 220px; }
 
@@ -671,6 +916,17 @@ button {
 }
 @keyframes spin {
   to { transform: rotate(360deg); }
+}
+@keyframes checkFlow {
+  to { stroke-dashoffset: -11; }
+}
+@keyframes ringPulse {
+  0%, 100% { transform: scale(1); opacity: 0.9; }
+  50%       { transform: scale(1.05); opacity: 1; }
+}
+@keyframes matePop {
+  from { transform: scale(0.3); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
 }
 
 /* ─── Responsive ─── */
